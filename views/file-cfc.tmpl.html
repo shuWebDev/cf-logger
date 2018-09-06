@@ -1,0 +1,192 @@
+<!-- saved from url=(0121)http://auth.dev.shu.commonspotcloud.com/CFIDE/componentutils/componentdetail.cfm?component=preview.webadmin.com.logs.file -->
+<ng-include src="'views/nav-logs.tmpl.html'"></ng-include>
+
+<article id="component" layout-padding>
+	<h4 class="md-display-1">
+		Component file (SHU CommonSpot Logging
+	Functions)<br>
+		<small>preview.webadmin.com.logs.file</small>
+	</h4>
+
+	<p>Defines functions for logging the interactions within CommonSpot</p>
+
+	<table>
+		<tbody>
+			<tr>
+				<td>path:</td>
+				<td>/cust/webroot/site8/webadmin/com/logs/file.cfc</td>
+			</tr>
+			<tr>
+				<td>serializable:</td>
+				<td>Yes</td>
+			</tr>
+			<tr>
+				<td>properties:</td>
+				<td>filePathRoot, fileType</td>
+			</tr>
+			<tr>
+				<td>methods:</td>
+				<td>check, create, createDirectory, delete, GETFILEPATHROOT, GETFILETYPE, init, setFilePath, SETFILETYPE</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<p>* - private method</p>
+
+	<table>
+		<tbody>
+			<tr>
+				<th>Property</th>
+				<th>Hint</th>
+				<th>Type</th>
+				<th>Req.</th>
+				<th>Implemented In</th>
+				<th>Default Value</th>
+				<th>Serializable</th>
+			</tr>
+			<tr>
+				<td><b>filePathRoot</b> (Base File Path)</td>
+				<td>Provides the initial path where logs would be saved.</td>
+				<td>string</td>
+				<td></td>
+				<td>file</td>
+				<td>/cust/webroot/cslogs</td>
+				<td>Yes</td>
+			</tr>
+			<tr>
+				<td><b>fileType</b> (Default File Type)</td>
+				<td>Provides the initial type where logs would be saved as. Valid types should be JSON, XML, CSV or TXT (as a last resort)</td>
+				<td>string</td>
+				<td></td>
+				<td>file</td>
+				<td>json</td>
+				<td>Yes</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<table>
+		<tbody>
+			<tr>
+				<th align="left" colspan="1">check (Check For Log)</th>
+			</tr>
+			<tr>
+				<td><pre><code class="language-clike">
+package boolean check (
+	required string fileName,
+	uuid  id
+)
+				</code></pre>
+				<p>Checks existence of a log.</p>
+				<p>Output: suppressed<br>
+				Parameters:<br>
+				&nbsp;&nbsp; <b>fileName:</b> string, required, fileName<br>
+				&nbsp;&nbsp; <b>id:</b> uuid, optional, id<br>
+				</p></td>
+			</tr>
+			<tr>
+				<th align="left" colspan="1">create (Create Log)</th>
+			</tr>
+			<tr>
+				<td><pre><code class="language-clike">
+package struct create (
+	required string fileName
+)
+				</code></pre>
+				<p>Creates log.</p>
+				<p>Output: suppressed<br>
+				Parameters:<br>
+				&nbsp;&nbsp; <b>fileName:</b> string, required, fileName</p></td>
+			</tr>
+			<tr>
+				<th align="left" colspan="1">createDirectory (Create Directory)</th>
+			</tr>
+			<tr>
+				<td><pre><code class="language-clike">
+package boolean createDirectory (
+	required string path
+)
+				</code></pre>
+				<p>Creates a directory.</p>
+				<p>Output: suppressed<br>
+				Parameters:<br>
+				&nbsp;&nbsp; <b>path:</b> string, required, path</p></td>
+			</tr>
+			<tr>
+				<th align="left" colspan="1">delete (Delete Log)</th>
+			</tr>
+			<tr>
+				<td><pre><code class="language-clike">
+package any delete (
+	required string fileName,
+	uuid id
+)
+				</code></pre>
+				<p>Deletes log.</p>
+				<p>Output: enabled<br>
+				Parameters:<br>
+				&nbsp;&nbsp; <b>fileName:</b> string, required, fileName<br>
+				&nbsp;&nbsp; <b>id:</b> uuid, optional, id</p></td>
+			</tr>
+			<tr>
+				<th align="left" colspan="1">GETFILEPATHROOT</th>
+			</tr>
+			<tr>
+				<td><pre><code class="language-clike">
+public string GETFILEPATHROOT ()
+				</code></pre>
+				<p>Output:</p></td>
+			</tr>
+			<tr>
+				<th align="left" colspan="1">GETFILETYPE</th>
+			</tr>
+			<tr>
+				<td><pre><code class="language-clike">
+public string GETFILETYPE ( )
+				</code></pre>
+				<p>Output:</p></td>
+			</tr>
+			<tr>
+				<th align="left" colspan="1">init  (Initialization)</th>
+			</tr>
+			<tr>
+				<td><pre><code class="language-clike">
+package any init ( )
+				</code></pre>
+				<p>Initializes the component</p>
+				<p>Output: suppressed</p></td>
+			</tr>
+			<tr>
+				<th align="left" colspan="1">setFilePath (Set File Path)</th>
+			</tr>
+			<tr>
+				<td><pre><code class="language-clike">
+package any setFilePath (
+	required string fileName,
+	date fileDate,
+	string fileType="[runtime expression]"
+)
+				</code></pre>
+				<p>Sets log file path.</p>
+				<p>Output: suppressed<br>
+				Parameters:<br>
+				&nbsp;&nbsp; <b>fileName:</b> string, required, fileName<br>
+				&nbsp;&nbsp; <b>fileDate:</b> date, optional, fileDate<br>
+				&nbsp;&nbsp; <b>fileType:</b> string, optional, fileType</p></td>
+			</tr>
+			<tr>
+				<th align="left" colspan="1">SETFILETYPE</th>
+			</tr>
+			<tr>
+				<td><pre><code class="language-clike">
+public file SETFILETYPE (
+	required string  fileType
+)
+				</code></pre>
+				<p>Output:<br>
+				Parameters:<br>
+				&nbsp;&nbsp; <b>fileType:</b> string, required, fileType</p></td>
+			</tr>
+		</tbody>
+	</table>
+</article>

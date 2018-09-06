@@ -1,0 +1,79 @@
+<!-- saved from url=(0122)http://auth.dev.shu.commonspotcloud.com/CFIDE/componentutils/componentdetail.cfm?component=preview.webadmin.com.logs.extra -->
+<ng-include src="'views/nav-logs.tmpl.html'"></ng-include>
+
+<article id="component" layout-padding width="100%">
+	<h4 class="md-display-1">
+		Component extra (SHU CommonSpot Logging Extras)<br>
+		<small>preview.webadmin.com.logs.extra</small>
+	</h4>
+
+	<p>Defines functions for logging the interactions within CommonSpot</p>
+
+	<table>
+	  <tbody>
+		<tr>
+			<td>path:</td>
+			<td>/cust/webroot/site8/webadmin/com/logs/extra.cfc</td>
+		</tr>
+		<tr>
+			<td>serializable:</td>
+			<td>Yes</td>
+		</tr>
+		<tr>
+			<td>properties:</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>methods:</td>
+			<td>getBrowserInfo, getCGIInfo, getUserData, init</td>
+		</tr>
+	  </tbody>
+	</table>
+
+	<p>* - private method</p>
+
+	<table>
+		<tbody>
+			<tr>
+				<th align="left" colspan="1">getBrowserInfo (Get Browser Info)</th>
+			</tr>
+			<tr>
+				<td><pre><code class="language-clike">
+package struct getBrowserInfo ()
+				</code></pre>
+				<p>Gets #request.browser#<br>
+				<p>Output: suppressed</p></td>
+			</tr>
+			<tr>
+				<th align="left" colspan="1">getCGIInfo (Get CGI Info)</th>
+			</tr>
+			<tr>
+				<td><pre><code class="language-clike">
+package struct getCGIInfo ( )
+				</code></pre>
+				<p>Gets #CGI#</p>
+				<p>Output: suppressed</p></td>
+			</tr>
+			<tr>
+				<th align="left" colspan="1">getUserData (Get User Data)</th>
+			</tr>
+			<tr>
+				<td><pre><code class="language-clike">
+package struct getUserData ()
+				</code></pre>
+				<p>Gets #request.user# data</p>
+				<p>Output: suppressed</p></td>
+			</tr>
+			<tr>
+				<th align="left" colspan="1">init (Initialization)</th>
+			</tr>
+			<tr>
+				<td><pre><code class="language-clike">
+package any init ( )
+				</code></pre>
+				<p>Initializes the component</p>
+				<p>Output: suppressed</p></td>
+			</tr>
+		</tbody>
+	</table>
+</article>

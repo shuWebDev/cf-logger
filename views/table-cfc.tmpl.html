@@ -1,0 +1,186 @@
+<!-- saved from url=(0122)http://auth.dev.shu.commonspotcloud.com/CFIDE/componentutils/componentdetail.cfm?component=preview.webadmin.com.logs.table -->
+<ng-include src="'views/nav-logs.tmpl.html'"></ng-include>
+
+<article id="component" layout-padding>
+	<h4 class="md-display-1">
+		Component table (SHU CommonSpot Logging Database Functions)<br>
+		<small>preview.webadmin.com.logs.table</small>
+	</h4>
+
+	<p>Defines functions for logging the interactions within CommonSpot to a table</p>
+	<table>
+		<tbody>
+			<tr>
+				<td>path:</td>
+				<td>/cust/webroot/site8/webadmin/com/logs/table.cfc</td>
+			</tr>
+			<tr>
+				<td>serializable:</td>
+				<td>Yes</td>
+			</tr>
+			<tr>
+				<td>properties:</td>
+				<td>dsn</td>
+			</tr>
+			<tr>
+				<td>methods:</td>
+				<td>addData, check, countRecords, create, GETDSN, init, list, read, SETDSN</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<p>* - private method</p>
+
+	<table>
+		<tbody>
+			<tr>
+				<th>Property</th>
+				<th>Hint</th>
+				<th>Type</th>
+				<th>Req.</th>
+				<th>Implemented In</th>
+				<th>Default Value</th>
+				<th>Serializable</th>
+			</tr>
+			<tr>
+				<td><b>dsn</b> (Datasource)</td>
+				<td>Provides the initial ColdFusion data source to create tables in.</td>
+				<td>string</td>
+				<td></td>
+				<td>table</td>
+				<td>commonspot-external</td>
+				<td>Yes</td>
+			</tr>
+		</tbody>
+	</table><br>
+	<br>
+	<table>
+		<tbody>
+			<tr>
+				<th align="left" colspan="1">addData (Add Log Data to DB Table)</th>
+			</tr>
+			<tr>
+				<td><pre><code class="language-clike">
+package any addData (
+	required string tableName,
+	required string valuesList
+)
+				</code></pre>
+				<p>Adds log data to db table.</p>
+				<p>Output: suppressed<br>
+				Parameters:<br>
+				&nbsp;&nbsp; <b>tableName:</b> string, required, tableName<br>
+				&nbsp;&nbsp; <b>valuesList:</b> string, required, valuesList</p></td>
+			</tr>
+			<tr>
+				<th align="left" colspan="1">check (Check for Table)</th>
+			</tr>
+			<tr>
+				<td><pre><code class="language-clike">
+package any check (
+	required string tableName
+)
+				</code></pre>
+				<p>Checks table.</p>
+				<p>Output: suppressed<br>
+				Parameters:<br>
+				&nbsp;&nbsp; <b>tableName:</b> string, required, tableName</p></td>
+			</tr>
+			<tr>
+				<th align="left" colspan="1">countRecords (Count Table Records)</th>
+			</tr>
+			<tr>
+				<td><pre><code class="language-clike">
+remote query countRecords (
+	required string tableName
+)
+				</code></pre>
+				<p>Counts log records.</p>
+				<p>Output: suppressed<br>
+				Parameters:<br>
+				&nbsp;&nbsp; <b>tableName:</b> string, required, tableName</p></td>
+			</tr>
+			<tr>
+				<th align="left" colspan="1">create (Create Log Table)</th>
+			</tr>
+			<tr>
+				<td><pre><code class="language-clike">
+package boolean create (
+	required string tableName
+)
+				</code></pre>
+				<p>Creates table.</p>
+				<p>Output: suppressed<br>
+				Parameters:<br>
+				&nbsp;&nbsp; <b>tableName:</b> string, required, tableName</p></td>
+			</tr>
+			<tr>
+				<th align="left" colspan="1">GETDSN</th>
+			</tr>
+			<tr>
+				<td><pre><code class="language-clike">
+public string GETDSN ( )
+				</code></pre>
+				<p>Output:</p></td>
+			</tr>
+			<tr>
+				<th align="left" colspan="1">init (Initialization)</th>
+			</tr>
+			<tr>
+				<td><pre><code class="language-clike">
+public any init ( )
+				</code></pre>
+				<p>Initializes the component</p>
+				Output: suppressed<br>
+				<br></td>
+			</tr>
+			<tr>
+				<th align="left" colspan="1">list (List Log Tables)</th>
+			</tr>
+			<tr>
+				<td><pre><code class="language-clike">
+remote array list ( )
+				</code></pre>
+				<p>List tables.</p>
+				<p>Output: suppressed</p></td>
+			</tr>
+			<tr>
+				<th align="left" colspan="1">read (Read Table Data)</th>
+			</tr>
+			<tr>
+				<td><pre><code class="language-clike">
+package any read (
+	required string tableName,
+	string strFieldList="",
+	string strWhere="",
+	string strOrderBy=" created DESC ",
+	numeric intMaxRows="0",
+	numeric intPage="1"
+)
+				</code></pre>
+				<p>Reads table.</p>
+				<p>Output: suppressed<br>
+				Parameters:<br>
+				&nbsp;&nbsp; <b>tableName:</b> string, required, tableName<br>
+				&nbsp;&nbsp; <b>strFieldList:</b> string, optional, strFieldList<br>
+				&nbsp;&nbsp; <b>strWhere:</b> string, optional, strWhere<br>
+				&nbsp;&nbsp; <b>strOrderBy:</b> string, optional, strOrderBy<br>
+				&nbsp;&nbsp; <b>intMaxRows:</b> numeric, optional, intMaxRows<br>
+				&nbsp;&nbsp; <b>intPage:</b> numeric, optional, intPage</p></td>
+			</tr>
+			<tr>
+				<th align="left" colspan="1">SETDSN</th>
+			</tr>
+			<tr>
+				<td><pre><code class="language-clike">
+public table SETDSN (
+	required string dsn
+)
+				</code></pre>
+				<p>Output:<br>
+				Parameters:<br>
+				&nbsp;&nbsp; <b>dsn:</b> string, required, dsn</p></td>
+			</tr>
+		</tbody>
+	</table>
+</article>

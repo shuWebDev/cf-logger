@@ -1,0 +1,46 @@
+<md-dialog aria-label="Log Entry Detail" ng-class="entry-detail">
+    <md-toolbar class="{{ entryClass }}">
+        <div class="md-toolbar-tools">
+            <h2 class="md-display-1" style="text-transform:capitalize">{{ entryType }} Log Data</h2>
+            <span flex></span>
+            <!-- <md-button ng-click="hide()" class="md-accent">Close</md-button> -->
+        </div>
+    </md-toolbar>
+    <md-dialog-content layout-padding flex="noshrink">
+      <section>
+        <h3 class="md-headline">{{ exceptionType }} {{ entryMessage }}</h3>
+        <p><b>Occured:</b> {{ entryCreated | date:'yyyy-MM-dd HH:mm:ss' }}<br>
+        <b>Server:</b> {{ entryServerID }}<br>
+        <span style="font-size:small" class="md-secondary"><b>UUID:</b> {{ entryUUID }}</span>
+        </p>
+      </section>
+    </md-dialog-content>
+    <md-dialog-content layout-padding>
+      <md-tabs md-dynamic-height md-border-bottom>
+        <md-tab ng-repeat="tab in tabs" label="{{ tab.title }}">
+            <md-content class="md-padding">
+                <md-table-container>
+                    <table md-table md-progress="promise" flex>
+                        <thead md-head>
+                            <tr md-row>
+                                <th md-column>Key</th>
+                                <th md-column>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody md-body>
+                            <tr md-row ng-repeat="(key, value) in tab.data">
+                                <td md-cell>{{ key }}</td>
+                                <td md-cell>{{ value }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </md-table-container>
+            </md-content>
+        </md-tab>
+      </md-tabs>
+    </md-dialog-content>
+    <md-dialog-actions>
+        <span flex></span>
+      <md-button ng-click="hide()" class="md-accent">Close</md-button>
+    </md-dialog-actions>
+</md-dialog>

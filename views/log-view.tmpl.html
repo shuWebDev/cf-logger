@@ -1,0 +1,40 @@
+<section layout="row" flex>
+	<md-sidenav md-is-locked-open="true" class="md-whiteframe-13dp" style="width:200px">
+		<md-toolbar class="md-accent" layout-padding>
+			<h3 class="md-headline">Available Logs</h3>
+		</md-toolbar>
+
+		<md-content layout="column" layout-align="start stretch">
+			<md-button class="md-raised md-primary" ng-repeat="table in tableList" href="#/clog/{{table.TABLENAME}}" ng-model="table">{{table.DISPLAYNAME}}</md-button>
+		</md-content>
+	</md-sidenav>
+
+	<md-content flex layout-padding>
+		<div class="md-toolbar-tools" layout="row">
+			<h2>Viewing: <tt>{{tableCurrent}}</tt></h2>
+			<span flex></span>
+			<h2><small id="entryCount" class="md-subhead">Record Count: {{entryCount}}</small></h2>
+		</div>
+
+		<md-table-container>
+			<table md-table>
+				<thead md-head>
+					<tr md-row>
+						<th md-column style="width:5%">Type</th>
+						<th md-column style="width:20%">Date / Time</th>
+						<th md-column style="width:65%">Message</th>
+					</tr>
+				</thead>
+				<tbody md-body>
+					<tr md-row ng-repeat="entry in entries" ng-controller="EntryListController" class="{{entryClass}}">
+						<td md-cell><md-button class="{{entryClass}}" ng-click="showEntry($event)" aria-label="view">{{entryType}}</md-button></td>
+						<td md-cell>{{entryCreated | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+						<td md-cell>{{entryMessage}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</md-table-container>
+
+		<md-table-pagination md-limit="pageMaxItems" md-limit-options="[10, 13, 25, 50]" md-page="pageCurrent" md-total="{{entryCount}}" md-on-paginate="getPagedData" md-page-select></md-table-pagination>
+	</md-content>
+</section> <!-- end log viewer app -->

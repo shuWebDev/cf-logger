@@ -1,0 +1,68 @@
+<html lang="en" ng-app="logViewer">
+	<head>
+		<!-- <base href="/webadmin/customcf/log-viewer/"> -->
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<!-- Angular Material style sheet -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.0-rc4/angular-material.min.css"><!-- Angular Material Library -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-material-data-table/0.10.8/md-data-table.min.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"><!-- Font Awesome -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.5.0/themes/prism.min.css"><!-- Code Syntax Highlighter -->
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.6/angular.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.6/angular-route.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.6/angular-animate.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.6/angular-aria.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.6/angular-messages.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.0-rc4/angular-material.min.js"></script><!-- Angular Material Library -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-material-data-table/0.10.8/md-data-table.min.js"></script>
+
+		<script type="text/javascript" src="js/app.js"></script>
+		<script type="text/javascript" src="js/controllers/table.js"></script>
+		<script type="text/javascript" src="js/controllers/entry-list.js"></script>
+
+		<style>
+			md-dialog.entry-detail {
+				max-height: 640px
+			}
+
+			.site-title {
+				margin-bottom: 0;
+				margin-top: 13px;
+			}
+
+			#component {
+				margin: auto 73px;
+			}
+
+			#component table {
+				width: 90%;
+			}
+
+			#component th {
+				padding: 6px;
+				font-size: 12px;
+				background-color: #cccccc;
+			}
+
+			#component td {
+				padding: 6px;
+				background-color: #eeeeee;
+				vertical-align : top;
+			}
+		</style>
+	</head>
+	<body ng-controller="MainController" layout="column" ng-cloak>
+		<md-toolbar layout-padding>
+			<header>
+				<h1 class="site-title md-display-3">Log Viewer<span ng-show="currentPageTitle">: {{currentPageTitle}}</span></h1>
+			</header>
+			<ng-include src="'views/nav-main.tmpl.html'"></ng-include>
+		</md-toolbar>
+
+		<section id="main" layout="row" flex>
+			<ng-view></ng-view>
+		</section>
+
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.5.0/prism.min.js"></script><!-- Code Syntax Highlighter -->
+	</body>
+</html>

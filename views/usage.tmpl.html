@@ -1,0 +1,80 @@
+<ng-include src="'views/nav-logs.tmpl.html'"></ng-include>
+
+<article layout-padding style="margin: auto 73px">
+<header>
+    <h2 class="md-headline">Usage</h2>
+</header>
+
+<p>In order to properly log information to the database, you must either use <code class="language-javascript">CreateObject()</code>
+    or the <code class="language-javascript">new</code> keyword within your ColdFusion code. It should be best practice to wrap everything in a <code class="language-javascript">try / catch</code>
+    block.</p>
+
+<h3 class="title">Using "new" <span class="md-subhead">(preferred)</span></h3>
+<p>Use this method if you want to work with the values returned from the call:</p>
+<pre><code class="language-javascript">this.objLog3 = new preview.webadmin.com.logs.log(fileName='myErrorLogName');
+this.logUpdated = this.objLog3.update(entry={message:'myErrorLogName'});
+</code></pre>
+
+<p>Use this method if you want to just write something to the log:</p>
+<pre><code class="language-javascript">new preview.webadmin.com.logs.log(fileName='myErrorLogName').update(entry={message:'log-viewer ran!'}, entryType='info');
+</code></pre>
+
+<p>If you are logging an error, then you will need to include that information in the message sent to the db.</p>
+<pre><code class="language-javascript">catch (any e) {
+  message = {message:e.message};
+  structAppend(message, {exceptionType:e.type});
+
+  // NOTE: Clean up the tag context so we don't get errors when converting to JSON.
+  tagContextTemp = {line:e.tagContext[1].line};
+  structAppend(tagContextTemp, {column:e.tagContext[1].column});
+  structAppend(tagContextTemp, {template:e.tagContext[1].template});
+  structAppend(tagContextTemp, {type:e.tagContext[1].type});
+  structAppend(tagContextTemp, {id:e.tagContext[1].id});
+
+  // NOTE: Append new tag context to the message.
+  structAppend(message, {tagContext:tagContextTemp});
+  new preview.webadmin.com.logs.log(fileName='myErrorLogName').update(entry={message:message}, entryType='[ error | warn | info ]');
+}
+</code></pre>
+
+<h3 class="title">Using "<code>CreateObject()</code>"</h3>
+<pre><code class="language-javascript">objLog = createObject("component", 'preview.webadmin.com.logs.log').init(fileName='Lee Test');
+// writeDump(var=objLog, expand=false, label='Logging Object');
+
+writeOutput("&lt;h1&gt;Update Log File With an Error&lt;/h1&gt;");
+try {
+  fack = fileOpen('/cust/webroot/logs/fack.json');
+}
+
+catch (any e) {
+  message = {message:e.message};
+  structAppend(message, {exceptionType:e.type});
+
+  // NOTE: Clean up the tag context so we don't get errors when converting to JSON.
+  tagContextTemp = {line:e.tagContext[1].line};
+  structAppend(tagContextTemp, {column:e.tagContext[1].column});
+  structAppend(tagContextTemp, {template:e.tagContext[1].template});
+  structAppend(tagContextTemp, {type:e.tagContext[1].type});
+  structAppend(tagContextTemp, {id:e.tagContext[1].id});
+
+  // NOTE: Append new tag context to the message.
+  structAppend(message, {tagContext:tagContextTemp});
+
+  this.log.errors = objLog.update(entry=message, entryType='error');
+  this.log.errorsReadTable = objLog.readTable(path=this.log.errors.orig.fileName, strOrderBy='created DESC', strWhereClause='type LIKE (''%error%'')');
+}
+
+// NOTE: Update file
+writeOutput("&lt;h1&gt;Update Log File&lt;/h1&gt;");
+this.updateData.entry = structNew(); // NOTE: Make sure we have an empty structure to start.
+msg = {message:"Updates log file with generic information."};
+structAppend(this.updateData.entry,msg);
+
+// NOTE: Add the entry to the log.
+this.log.update = objLog.update(fileName='Lee Test', entry=this.updateData.entry);
+
+// NOTE: Read file
+writeOutput("&lt;h1&gt;Read Log File&lt;/h1&gt;");
+this.log.readTable = objLog.readTable(path=this.log.update.orig.fileName, strOrderBy='created DESC');
+</code></pre>
+</article>
