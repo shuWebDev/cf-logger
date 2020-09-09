@@ -1,0 +1,47 @@
+# EditorConfig is awesome: http://EditorConfig.org
+
+# top-most EditorConfig file
+# root = true # Commented to look for personal developer rules not included here.
+
+#Set the default character set
+charset = utf-8
+
+# Get rid of whitespace to avoid diffs with a bunch of EOL changes
+trim_trailing_whitespace = true
+
+# Unix-style newlines with a newline ending every file
+[*]
+end_of_line = lf
+indent_size = 4
+indent_style = tab
+insert_final_newline = true
+tab_width = 4
+trim_trailing_whitespace = true
+
+[*.env]
+end_of_line = lf
+indent_size = 4
+indent_style = space
+insert_final_newline = true
+tab_width = 4
+trim_trailing_whitespace = true
+
+[*.md]
+trim_trailing_whitespace = false
+
+# Microsoft's settings for TypeScript. Found on https://github.com/Microsoft/TypeScript/blob/master/.editorconfig
+[{src,scripts}/**.{ts,json,js}]
+end_of_line = crlf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+indent_style = space
+indent_size = 4
+
+[*.yml]
+end_of_line = lf
+indent_size = 4
+indent_style = space
+insert_final_newline = true
+tab_width = 4
+trim_trailing_whitespace = true

@@ -1,0 +1,7 @@
+<md-content flex>
+	<md-toolbar layout-padding class="md-accent">
+		<div data-md-content layout="row" layout-align="start stretch" layout-padding>
+			<md-button class="md-raised md-primary" ng-repeat="table in tableList" href="#/clog/{{table.TABLENAME}}" ng-model="table"><i class="fa fa-database" aria-hidden="true"></i>&nbsp;&nbsp;{{table.DISPLAYNAME}}</md-button>
+		</div>
+	</md-toolbar>
+</md-content>
