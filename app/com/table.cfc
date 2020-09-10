@@ -6,7 +6,7 @@
 * @displayName 'SHU CommonSpot Logging Database Functions'
 * @hint 'Defines functions for logging the interactions within CommonSpot to a table'
 * @name 'table'
-* @output false
+* @output true
 */
 
 component {
@@ -28,7 +28,7 @@ component {
   * @displayName 'Initialization'
   * @description 'Intializes the component'
   * @hint 'Initializes the component'
-  * @output false
+  * @output true
   */
 
   package struct function init() {
@@ -39,7 +39,7 @@ component {
   * @displayName 'Create Log Table'
   * @description 'Creates a new table for a log.'
   * @hint 'Creates table.'
-  * @output false
+  * @output true
   */
 
   package boolean function create( required string tableName ) {
@@ -79,7 +79,7 @@ component {
   * @displayName 'Add Log Data to DB Table'
   * @description 'Adds log data to a database table.'
   * @hint 'Adds log data to db table.'
-  * @output false
+  * @output true
   */
 
   package any function addData( required string tableName, required string valuesList ) {
@@ -95,7 +95,7 @@ component {
   * @displayName 'Read Table Data'
   * @description 'Reads log records from a database table.'
   * @hint 'Reads table.'
-  * @output false
+  * @output true
   */
 
   package any function read(
@@ -126,7 +126,7 @@ component {
   * @displayName 'Check for Table'
   * @description 'Checks a database for a given table.'
   * @hint 'Checks table.'
-  * @output false
+  * @output true
   */
 
   package any function check( required string tableName ) {
@@ -141,7 +141,7 @@ component {
   * @displayName 'Count Table Records'
   * @description 'Counts the number of log records in a log table.'
   * @hint 'Counts log records.'
-  * @output false
+  * @output true
   */
 
   package query function countRecords( required string tableName ) {
@@ -162,7 +162,7 @@ component {
   * @displayName 'List Log Tables'
   * @description 'Lists the log tables in the database.'
   * @hint 'List tables.'
-  * @output false
+  * @output true
   */
 
   package array function list() {

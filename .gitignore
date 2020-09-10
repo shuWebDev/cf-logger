@@ -1,2 +1,4 @@
 app/WEB-INF/cfclasses
 app/WEB-INF/cfform/logs
+database
+cflogs

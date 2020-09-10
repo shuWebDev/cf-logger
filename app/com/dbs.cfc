@@ -6,7 +6,7 @@
 * @displayName 'SHU Datasource Functions'
 * @hint 'Defines functions for interacting with CF datasources'
 * @name 'dbs'
-* @output false
+* @output table
 */
 
 component {
@@ -23,7 +23,7 @@ component {
   * @displayName 'Initialization'
   * @description 'Intializes the component'
   * @hint 'Initializes the component'
-  * @output false
+  * @output table
   */
 
   package struct function init() {
@@ -35,7 +35,7 @@ component {
   * @displayName 'Create Table'
   * @description 'Creates a new table in the specified datasource.'
   * @hint 'Creates table.'
-  * @output false
+  * @output table
   */
 
   package any function tableCreate(
@@ -93,7 +93,7 @@ component {
   * @displayName 'Create Table Index'
   * @description 'Creates an index on the given column(s) for a given table.'
   * @hint 'Creates an index on a table.'
-  * @output false
+  * @output table
   */
 
   package boolean function tableCreateIndex(
@@ -133,7 +133,7 @@ component {
   * @displayName 'Add Table Data'
   * @description 'Adds data to a given table in the specified datasource.'
   * @hint 'Adds data to table.'
-  * @output false
+  * @output table
   */
 
   package any function tableAdd(
@@ -177,7 +177,7 @@ component {
   * @displayName 'Update Table Data'
   * @description 'Updates a given table in the specified datasource.'
   * @hint 'Updates table.'
-  * @output false
+  * @output table
   */
 
   package any function tableUpdate(
@@ -221,7 +221,7 @@ component {
   * @displayName 'Read Table Data'
   * @description 'Reads a given table in the specified datasource.'
   * @hint 'Reads table.'
-  * @output false
+  * @output table
   */
 
   package struct function tableRead(
@@ -296,58 +296,68 @@ component {
     return data;
   }
 
-  /**
-  * @displayName 'Check for Table'
-  * @description 'Checks for a given table in the specified datasource.'
-  * @hint 'Checks table.'
-  * @output false
-  */
+	/**
+	 * @displayName 'Check for Table'
+	* @description 'Checks for a given table in the specified datasource.'
+	* @hint 'Checks table.'
+	* @output table
+	*/
 
-  package boolean function tableCheck(
-    required string tableName,
-    string datasource=getDSN()
-  ) {
-    // NOTE: Create a place holder structure to be returned.
-    data = structNew();
+	package boolean function tableCheck(
+		required string tableName,
+		string datasource=getDSN()
+	) {
+		// NOTE: Create a place holder structure to be returned.
+		var data = structNew();
 
-    // NOTE: Remove the spaces from the table name
-    arguments.tableName = removeSpaces(arguments.tableName);
+		try {
+			// NOTE: Remove the spaces from the table name
+			arguments.tableName = removeSpaces(arguments.tableName);
 
-    // NOTE: Create a new query() to read data.
-    qryCheck = new query();
-    qryCheck.setDatasource(arguments.datasource);
-    qryCheck.setName('checkTable');
+			// NOTE: Create a new query() to read data.
+			qryCheck = new query();
+			qryCheck.setDatasource(arguments.datasource);
+			qryCheck.setName('checkTable');
 
-     qryCheck.setSQL('
-      SHOW TABLES
-      LIKE ''' & arguments.tableName & ''';
-    ');
+			qryCheck.setSQL('
+			SHOW TABLES
+			LIKE ''' & arguments.tableName & ''';
+			');
 
-    // NOTE: Execute the query.
-    qryExecute = qryCheck.execute();
+			// NOTE: Execute the query.
+			qryExecute = qryCheck.execute();
 
-    data.result = qryExecute.getResult();
-    data.prefix = qryExecute.getPrefix();
-    writeDump(var=arguments, expand=false, label='createTable Arguments');
-    writeDump(var=qryExecute, expand=false, label='qryCheck from table check function');
-    writeDump(var=data, expand=false, label='Data from table check function');
+			data.result = qryExecute.getResult();
+			data.prefix = qryExecute.getPrefix();
+			writeDump(var=arguments, expand=false, label='createTable Arguments');
+			writeDump(var=qryExecute, expand=false, label='qryCheck from table check function');
+			writeDump(var=data, expand=false, label='Data from table check function');
 
-    // NOTE: Clear out the query so we can run another one fresh.
-    qryCheck.clearParams();
+			// NOTE: Clear out the query so we can run another one fresh.
+			qryCheck.clearParams();
 
-    if ( data.prefix.recordCount eq 0 ) {
-      return false;
-    } else {
-      return true;
-    }
+			if ( data.prefix.recordCount eq 0 ) {
+				return false;
+			} else {
+				return true;
+			}
+		}
 
-  }
+		catch (any error) {
+			writeDump(var=error, expand=false, label='Error from dbs.tableCheck()');
+			rethrow;
+		}
+
+		finally {
+
+		}
+	}
 
   /**
   * @displayName 'Drop Table'
   * @description Deletes a given table in the specified datasource.'
   * @hint 'Drops a table.'
-  * @output false
+  * @output table
   */
 
   package boolean function tableDrop(
@@ -395,7 +405,7 @@ component {
   * @displayName 'Count Records'
   * @description 'Counts the records in a given table'
   * @hint 'Counts the records.'
-  * @output false
+  * @output table
   */
 
   package struct function countRecords(
@@ -438,7 +448,7 @@ component {
   * @displayName 'Remove Spaces'
   * @description 'Replaces spaces in a given string with hyphens ("-") and converts to lower case.'
   * @hint 'Removes spaces.'
-  * @output false
+  * @output table
   */
 
   private string function removeSpaces(

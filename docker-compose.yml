@@ -2,18 +2,18 @@ version: "3.8"
 
 services:
     coldfusion:
-        container_name: cfCustomLogger
+        container_name: coldfusion
         build:
             context: ./app
             dockerfile: Dockerfile
         image: app
         depends_on:
-            # - redis
             - addons
         ports:
             - "8500:8500"
         volumes:
             - "./app:/app"
+            - "./cflogs:/opt/coldfusion/cfusion/logs"
         env_file:
             - config/coldfusion.env
         healthcheck:
@@ -41,15 +41,20 @@ services:
         networks:
             - cfCustomLoggerNet
 
-    # mysql:
-    #     container_name: mysql
-    #     image: mysql:latest
-    #     ports:
-    #         - "3306:3306"
-    #     volumes:
-    #         - "./database/mysql_data:/data"
-    #     networks:
-    #         - cfCustomLoggerNet
+    mysql:
+        container_name: mysql
+        image: mysql:latest
+        ports:
+            - "3306:3306"
+        volumes:
+            - "./database/mysql_data:/var/lib/mysql"
+        environment:
+            MYSQL_ROOT_PASSWORD: "password"
+            MYSQL_USER: "mysql"
+            MYSQL_PASSWORD: "password"
+            MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+        networks:
+            - cfCustomLoggerNet
 
     redis:
         container_name: redis
@@ -81,7 +86,7 @@ volumes:
     redis_data:
     app_data:
     cf_root:
-    # mysql:
+    mysql:
 
 networks:
     cfCustomLoggerNet:
