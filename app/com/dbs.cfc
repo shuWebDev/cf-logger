@@ -6,7 +6,7 @@
 * @displayName 'SHU Datasource Functions'
 * @hint 'Defines functions for interacting with CF datasources'
 * @name 'dbs'
-* @output table
+* @output true
 */
 
 component {
@@ -23,7 +23,7 @@ component {
   * @displayName 'Initialization'
   * @description 'Intializes the component'
   * @hint 'Initializes the component'
-  * @output table
+  * @output true
   */
 
   package struct function init() {
@@ -35,7 +35,7 @@ component {
   * @displayName 'Create Table'
   * @description 'Creates a new table in the specified datasource.'
   * @hint 'Creates table.'
-  * @output table
+  * @output true
   */
 
   package any function tableCreate(
@@ -93,7 +93,7 @@ component {
   * @displayName 'Create Table Index'
   * @description 'Creates an index on the given column(s) for a given table.'
   * @hint 'Creates an index on a table.'
-  * @output table
+  * @output true
   */
 
   package boolean function tableCreateIndex(
@@ -133,7 +133,7 @@ component {
   * @displayName 'Add Table Data'
   * @description 'Adds data to a given table in the specified datasource.'
   * @hint 'Adds data to table.'
-  * @output table
+  * @output true
   */
 
   package any function tableAdd(
@@ -177,7 +177,7 @@ component {
   * @displayName 'Update Table Data'
   * @description 'Updates a given table in the specified datasource.'
   * @hint 'Updates table.'
-  * @output table
+  * @output true
   */
 
   package any function tableUpdate(
@@ -221,7 +221,7 @@ component {
   * @displayName 'Read Table Data'
   * @description 'Reads a given table in the specified datasource.'
   * @hint 'Reads table.'
-  * @output table
+  * @output true
   */
 
   package struct function tableRead(
@@ -300,7 +300,7 @@ component {
 	 * @displayName 'Check for Table'
 	* @description 'Checks for a given table in the specified datasource.'
 	* @hint 'Checks table.'
-	* @output table
+	* @output true
 	*/
 
 	package boolean function tableCheck(
@@ -357,7 +357,7 @@ component {
   * @displayName 'Drop Table'
   * @description Deletes a given table in the specified datasource.'
   * @hint 'Drops a table.'
-  * @output table
+  * @output true
   */
 
   package boolean function tableDrop(
@@ -405,7 +405,7 @@ component {
   * @displayName 'Count Records'
   * @description 'Counts the records in a given table'
   * @hint 'Counts the records.'
-  * @output table
+  * @output true
   */
 
   package struct function countRecords(
@@ -448,7 +448,7 @@ component {
   * @displayName 'Remove Spaces'
   * @description 'Replaces spaces in a given string with hyphens ("-") and converts to lower case.'
   * @hint 'Removes spaces.'
-  * @output table
+  * @output true
   */
 
   private string function removeSpaces(

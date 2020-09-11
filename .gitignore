@@ -1,4 +1,4 @@
-app/WEB-INF/cfclasses
-app/WEB-INF/cfform/logs
-database
+app/WEB-INF
+database/mysql_data
+database/redis_data
 cflogs

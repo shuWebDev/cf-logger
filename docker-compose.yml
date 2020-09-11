@@ -1,28 +1,30 @@
-version: "3.8"
+version: "3"
 
 services:
     coldfusion:
-        container_name: coldfusion
+        container_name: shuCustomLogger
         build:
             context: ./app
             dockerfile: Dockerfile
         image: app
         depends_on:
-            - addons
+            - mysql
+#            - redis
+#            - addons
         ports:
             - "8500:8500"
         volumes:
             - "./app:/app"
             - "./cflogs:/opt/coldfusion/cfusion/logs"
         env_file:
-            - config/coldfusion.env
+            - coldfusion.env
         healthcheck:
             test: curl -f http://addons:8989/solr/ || exit 1
             interval: 1m
             timeout: 3s
         deploy:
-            # mode: replicated
-            # replicas: 2
+            #mode: replicated
+            #replicas: 2
             restart_policy:
                 condition: on-failure
             update_config:
@@ -31,19 +33,19 @@ services:
         networks:
             - cfCustomLoggerNet
 
-    addons:
-        container_name: cfAddons
-        image: eaps-docker-coldfusion.bintray.io/cf/addons:latest-2018
-        environment:
-            - acceptEULA=YES
-        ports:
-            - "8989:8989"
-        networks:
-            - cfCustomLoggerNet
+#    addons:
+#        container_name: addons
+#        image: eaps-docker-coldfusion.bintray.io/cf/addons:latest-2018
+#        environment:
+#            - acceptEULA=YES
+#        ports:
+#            - "8989:8989"
+#        networks:
+#            - cfCustomLoggerNet
 
     mysql:
         container_name: mysql
-        image: mysql:latest
+        image: mysql:8.0
         ports:
             - "3306:3306"
         volumes:
@@ -56,34 +58,34 @@ services:
         networks:
             - cfCustomLoggerNet
 
-    redis:
-        container_name: redis
-        image: redis:latest
-        ports:
-            - "6381:6379"
-        volumes:
-            - "./database/redis_data:/data"
-        networks:
-            - cfCustomLoggerNet
+#    redis:
+#        container_name: redis
+#        image: redis:6.0.7
+#        ports:
+#            - "6381:6379"
+#        volumes:
+#            - "./database/redis_data:/data"
+#        networks:
+#            - cfCustomLoggerNet
 
-    pmt:
-        container_name: cfPMT
-        image: eaps-docker-coldfusion.bintray.io/cf/pmt:latest-2018
-        depends_on:
-            - coldfusion
-        ports:
-            - "9101:9101"
-        env_file:
-            - config/pmt.env
-        healthcheck:
-            test: curl -f http://localhost:9101/
-            interval: 1m
-            timeout: 3s
-        networks:
-            - cfCustomLoggerNet
+#    pmt:
+#        container_name: pmt
+#        image: eaps-docker-coldfusion.bintray.io/cf/pmt:latest-2018
+#        depends_on:
+#            - coldfusion
+#        ports:
+#            - "9101:9101"
+#        env_file:
+#            - pmt.env
+#        healthcheck:
+#            test: curl -f http://localhost:9101/
+#            interval: 1m
+#            timeout: 3s
+#        networks:
+#            - cfCustomLoggerNet
 
 volumes:
-    redis_data:
+#    redis_data:
     app_data:
     cf_root:
     mysql:
