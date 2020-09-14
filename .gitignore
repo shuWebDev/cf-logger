@@ -1,4 +1,3 @@
 app/WEB-INF
-database/mysql_data
-database/redis_data
+database
 cflogs

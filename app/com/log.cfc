@@ -49,11 +49,17 @@ component {
 		required string name hint='The name of the file to log to.',
 		boolean createTable=1 hint='Create a table for this log.',
 		boolean createFile=0 hint='Create a JSON file for this log.',
-		array tableColumns=['uuid', 'timestamp', 'data'] hint='Columns for the table that gets created. We''ll also include browser & CGI info.'
+		array tableColumns=[] hint='Columns for the table that gets created. We''ll also include browser & CGI info.'
 	) {
 
 		// NOTE: Create an object so we can access the "extra" component.
 		var this['extra'] = new extra();
+		var this['table'] = new table();
+		var standardColumns = [
+			'serverID VARCHAR(50)',
+			'serverIP VARCHAR(50)',
+			'serverName VARCHAR(50)'
+		];
 
 		// Variable Definitions
 		// NOTE: Set the file name
@@ -79,8 +85,19 @@ component {
 		// NOTE: Let's create a table
 		if ( arguments.createTable ) {
 			try {
-				// NOTE: Create an object so we can access the "db" component.
-				var this['table'] = new table();
+				if ( arguments.tableColumns.isEmpty()) {
+					arguments.tableColumns = [
+						'created DATETIME NOT NULL',
+						'data TEXT',
+						'memo TEXT',
+						'type VARCHAR(50)',
+						'uuid VARCHAR(35) NOT NULL',
+						'PRIMARY KEY ( uuid )'
+					];
+				}
+
+				// NOTE: Append the standard columns to the table.
+				arrayAppend(arguments.tableColumns, standardColumns, true);
 
 				// NOTE: Check to see if the datasource is available.
 				// TODO: Check it!!!
@@ -91,11 +108,12 @@ component {
 				var this['createTable'] = arguments.createTable;
 				var this['tableColumns'] = arguments.tableColumns;
 
-				// NOTE: Check to see if the table exists
-				this['tableExists'] = this.table.check(getTableName());
+				// NOTE: Create an object so we can access the "db" component.
+				var this['createLogTable'] = this.table.create(name=getTableName(), columns=arguments.tableColumns);
 
-				// NOTE: Create the table if it doesn't exist.
-				// this['tableCreated'] = tableCreate(columns=arguments.tableColumns);
+				// if ( !this.tableExists ) {
+				// 	this['tableCreated'] = tableCreate(columns=arguments.tableColumns);
+				// }
 			}
 
 			catch ( any error ) {
