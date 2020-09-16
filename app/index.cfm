@@ -16,7 +16,7 @@
 				datasource.setMySQL5(
 					name="commonspot-external",
 					host="mysql",
-					database="custom_logger",
+					database="commonspot-external",
 					username='root',
 					password='password'
 				);
@@ -26,28 +26,28 @@
 		}
 
 		datasourceMappings = datasource.getDatasources();
-		writeDump(var=datasourceMappings, expand=false);
+		// writeDump(var=datasourceMappings, expand=false);
 	}
 
 	catch ( any error ) {
-		writeDump(var=error, expand=false);
+		writeDump(var=error, expand=false, label='create datasource error.');
 	}
 
 	// NOTE: Add a new table for logging
 	saveData = [
-		'created DATETIME NOT NULL',
 		'data TEXT',
 		'type VARCHAR(50)',
-		'uuid VARCHAR(35) NOT NULL',
-		'PRIMARY KEY ( uuid )'
+		'username VARCHAR(50)'
 	];
 
 	logTesting = new com.log(
 		name = 'testing',
-		createTable = 1,
-		createFile = 0,
+		useTable = 1,
+		useFile = 0,
 		tableColumns = saveData
 	);
+
+	// logTesting.update(entry='some content here.');
 
 	writeOutput('<h1>Index File Dumps!</h1>');
 

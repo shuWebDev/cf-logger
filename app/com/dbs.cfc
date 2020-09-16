@@ -10,124 +10,126 @@
 */
 
 component {
-  // Property Definitions
-  /**
-  * @default 'commonspot-external'
-  * @displayName 'Datasource'
-  * @hint 'Provides the initial datasource to create tables in.'
-  * @type string
-  */
-  property dsn;
+	// Property Definitions
+	/**
+	* @default 'commonspot-external'
+	* @displayName 'Datasource'
+	* @hint 'Provides the initial datasource to create tables in.'
+	* @type string
+	*/
+	property dsn;
 
-  /**
-  * @displayName 'Initialization'
-  * @description 'Intializes the component'
-  * @hint 'Initializes the component'
-  * @output true
-  */
+	/**
+	 * @displayName 'Initialization'
+	* @description 'Intializes the component'
+	* @hint 'Initializes the component'
+	* @output true
+	*/
 
-  package struct function init() {
-	// NOTE: Let's just return the object here...
-    return this;
-  }
+	//! TODO: Create a function to ensure that the requested database is valid.
 
-  /**
-  * @displayName 'Create Table'
-  * @description 'Creates a new table in the specified datasource.'
-  * @hint 'Creates table.'
-  * @output true
-  */
+	package struct function init() {
+		// NOTE: Let's just return the object here...
+		return this;
+	}
 
-  package any function tableCreate(
-    required string tableName,
-    required string columns,
-    string datasource=getDSN(),
-    string type='permanent',
-    boolean checkExisting=true
-  ) {
-    // NOTE: Create a place holder structure to be returned.
-    data = structNew();
+	/**
+	* @displayName 'Create Table'
+	* @description 'Creates a new table in the specified datasource.'
+	* @hint 'Creates table.'
+		* @output true
+		*/
 
-    // NOTE: Remove the spaces from the table name
-    arguments.tableName = removeSpaces(arguments.tableName);
+	package any function tableCreate(
+		required string tableName,
+		required string columns,
+		string datasource=getDSN(),
+		string type='permanent',
+		boolean checkExisting=true
+	) {
+		// NOTE: Create a place holder structure to be returned.
+		data = structNew();
 
-    // NOTE: Check for existing tables?
-    if ( arguments.checkExisting ) {
-      checkExists = 'IF NOT EXISTS ';
-    } else {
-      checkExists = '';
-    }
+		// NOTE: Remove the spaces from the table name
+		arguments.tableName = removeSpaces(arguments.tableName);
 
-    // NOTE: Check to see if this is a temporary table
-    if ( arguments.type neq 'permanent' ) {
-      tableType = 'TEMPORARY ';
-    } else {
-      tableType = '';
-    }
+		// NOTE: Check for existing tables?
+		if ( arguments.checkExisting ) {
+			checkExists = 'IF NOT EXISTS ';
+		} else {
+			checkExists = '';
+		}
 
-    // NOTE: Create a new query() to insert data.
-    qryGet = new query();
-    qryGet.setDatasource(arguments.datasource);
-    qryGet.setName('createTable');
+		// NOTE: Check to see if this is a temporary table
+		if ( arguments.type neq 'permanent' ) {
+			tableType = 'TEMPORARY ';
+		} else {
+			tableType = '';
+		}
 
-     qryGet.setSQL('
-      CREATE ' & tableType & 'TABLE ' & checkExists & '`' & arguments.tableName & '`' & ' (' & arguments.columns & ');
-    ');
+		// NOTE: Create a new query() to insert data.
+		qryGet = new query();
+		qryGet.setDatasource(arguments.datasource);
+		qryGet.setName('createTable');
 
-    // NOTE: Execute the query.
-    qryExecute = qryGet.execute();
+		qryGet.setSQL('
+			CREATE ' & tableType & 'TABLE ' & checkExists & '`' & arguments.tableName & '`' & ' (' & arguments.columns & ');
+		');
 
-    data.result = qryExecute.getResult();
-    data.prefix = qryExecute.getPrefix();
-    // writeDump(var=qryExecute, expand=false, label='query from dbs.tableCreate()');
-    // writeDump(var=arguments, expand=false, label='dbs.createTable() Arguments');
-    // writeDump(var=data, expand=false, label='Data from dbs.tableCreate()');
+		// NOTE: Execute the query.
+		qryExecute = qryGet.execute();
 
-    // NOTE: Clear out the query so we can run another one fresh.
-    qryGet.clearParams();
+		data.result = qryExecute.getResult();
+		data.prefix = qryExecute.getPrefix();
+		// writeDump(var=qryExecute, expand=false, label='query from dbs.tableCreate()');
+		// writeDump(var=arguments, expand=false, label='dbs.createTable() Arguments');
+		// writeDump(var=data, expand=false, label='Data from dbs.tableCreate()');
 
-    return data;
-  }
+		// NOTE: Clear out the query so we can run another one fresh.
+		qryGet.clearParams();
 
-  /**
-  * @displayName 'Create Table Index'
-  * @description 'Creates an index on the given column(s) for a given table.'
-  * @hint 'Creates an index on a table.'
-  * @output true
-  */
+		return data;
+	}
 
-  package boolean function tableCreateIndex(
-    required string tableName,
-    required string columnList,
-    string datasource=getDSN()
-  ) {
-    // NOTE: Create a place holder structure to be returned.
-    data = structNew();
+	/**
+	* @displayName 'Create Table Index'
+	* @description 'Creates an index on the given column(s) for a given table.'
+	* @hint 'Creates an index on a table.'
+	* @output true
+	*/
 
-    // NOTE: Remove the spaces from the table name
-    arguments.tableName = removeSpaces(arguments.tableName);
+	package boolean function tableCreateIndex(
+		required string tableName,
+		required string columnList, // list of columns to create the index with.
+		string datasource=getDSN()
+	) {
+		// NOTE: Create a place holder structure to be returned.
+		data = structNew();
 
-    // NOTE: Create a new query() to insert data.
-    qryIndex = new query();
-    qryIndex.setDatasource(arguments.datasource);
-    qryIndex.setName('createIndex');
+		// NOTE: Remove the spaces from the table name
+		arguments.tableName = removeSpaces(arguments.tableName);
 
-     qryIndex.setSQL('
-      CREATE INDEX `index_' & arguments.tableName & '`
-      ON `' & arguments.tableName & '` (' & arguments.columnList & ')
-    ');
+		// NOTE: Create a new query() to insert data.
+		qryIndex = new query();
+		qryIndex.setDatasource(arguments.datasource);
+		qryIndex.setName('createIndex');
 
-    // NOTE: Execute the query.
-    qryExecute = qryIndex.execute();
+		qryIndex.setSQL('
+		CREATE INDEX `index_' & arguments.tableName & '`
+		ON `' & arguments.tableName & '` (' & arguments.columnList & ')
+		');
 
-    data.result = qryExecute.getResult();
-    data.prefix = qryExecute.getPrefix();
-    // writeDump(var=arguments, expand=false, label='createTable Arguments');
-    // writeDump(var=qryExecute, expand=false, label='qryIndex from table check function');
-    // writeDump(var=data, expand=false, label='Data from table check function');
+		// NOTE: Execute the query.
+		qryExecute = qryIndex.execute();
 
-    return true;
-  }
+		data.result = qryExecute.getResult();
+		data.prefix = qryExecute.getPrefix();
+		// writeDump(var=arguments, expand=false, label='createTable Arguments');
+		// writeDump(var=qryExecute, expand=false, label='qryIndex from table check function');
+		// writeDump(var=data, expand=false, label='Data from table check function');
+
+		return true;
+	}
 
   /**
   * @displayName 'Add Table Data'

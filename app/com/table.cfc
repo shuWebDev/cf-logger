@@ -44,22 +44,13 @@ component {
 
 	package any function create( //boolean
 		required string name hint='The name of the table to be created.',
-		required array columns hint='The columns of data to be saved.'
+		required array fields hint='The columns of data to be saved.'
 	) {
 		writeDump(var=arguments, expand=false, label='table.create() arguments');
 
 		try {
-			// NOTE: Check to see if the table exists and create it if it isn't there.
-			tableExists = check(name=arguments.name);
-			writeDump(var=tableExists, expand=false, label='table.check()');
-
-			if ( !tableExists ) {
-				variables.dbs.tableCreate(tableName = arguments.name, columns = arrayToList(arguments.columns));
-				// variables.dbs.tableCreateIndex(tableName = arguments.name, columnList = 'created');
-
-			}
-
-
+			variables.dbs.tableCreate(tableName = arguments.name, columns = arrayToList(arguments.fields));
+			// variables.dbs.tableCreateIndex(tableName = arguments.name, columnList = 'created');
 			return this;
 		}
 
