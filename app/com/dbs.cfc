@@ -75,6 +75,7 @@ component {
 		qryGet.setSQL('
 			CREATE ' & tableType & 'TABLE ' & checkExists & '`' & arguments.tableName & '`' & ' (' & arguments.columns & ');
 		');
+		writeDump(var=qryGet, expand=false, label='qryGet from dbs.tableCreate()');
 
 		// NOTE: Execute the query.
 		qryExecute = qryGet.execute();
@@ -138,42 +139,43 @@ component {
   * @output true
   */
 
-  package any function tableAdd(
-    required string tableName,
-    required string columnList,
-    required string valuesList,
-    string datasource=getDSN()
-  ) {
-    // NOTE: Create a place holder structure to be returned.
-    data = structNew();
+	package any function tableAdd(
+		required string name,
+		required string columns,
+		required string values,
+		string datasource=getDSN()
+	) {
+		// NOTE: Create a place holder structure to be returned.
+		var data = {};
 
-    // NOTE: Remove the spaces from the table name
-    arguments.tableName = removeSpaces(arguments.tableName);
+		// NOTE: Remove the spaces from the table name
+		arguments.name = removeSpaces(arguments.name);
 
-    // NOTE: Create a new query() to insert data.
-    qryAdd = new query();
-    qryAdd.setDatasource(arguments.datasource);
-    qryAdd.setName('addTable');
+		// NOTE: Create a new query() to insert data.
+		var qryAdd = new query();
+		qryAdd.setDatasource(arguments.datasource);
+		qryAdd.setName('addTable');
 
-     qryAdd.setSQL('
-      INSERT INTO ' & arguments.tableName & ' (' & arguments.columnList & ')
-      VALUES (' & arguments.valuesList & ');
-    ');
+		qryAdd.setSQL('
+		INSERT INTO ' & arguments.name & ' (' & arguments.columns & ')
+		VALUES (' & arguments.values & ');
+		');
 
-    // NOTE: Execute the query.
-    qryExecute = qryAdd.execute();
+		// NOTE: Execute the query.
+		qryExecute = qryAdd.execute();
 
-    data.result = qryExecute.getResult();
-    data.prefix = qryExecute.getPrefix();
-    // writeDump(var=qryExecute, expand=false, label='Data from function');
-    // writeDump(var=arguments, expand=false, label='addTable Arguments');
-    // writeDump(var=qryAdd, expand=false, label='Data from dbs.tableAdd()');
+		data.result = qryExecute.getResult();
+		data.prefix = qryExecute.getPrefix();
+		writeDump(var=qryAdd, expand=false, label='qryAdd from dbs.tableAdd()');
+		writeDump(var=qryExecute, expand=false, label='Data from function');
+		writeDump(var=arguments, expand=false, label='addTable Arguments');
+		writeDump(var=qryAdd, expand=false, label='Data from dbs.tableAdd()');
 
-    // NOTE: Clear out the query so we can run another one fresh.
-    qryAdd.clearParams();
+		// NOTE: Clear out the query so we can run another one fresh.
+		qryAdd.clearParams();
 
-    return data;
-  }
+		return data;
+	}
 
   /**
   * @displayName 'Update Table Data'

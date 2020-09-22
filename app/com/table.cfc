@@ -72,14 +72,31 @@ component {
   * @output true
   */
 
-  package any function addData( required string tableName, required string valuesList ) {
-	this.columnList = 'created, data, memo, serverID, serverIP, serverName, type, uuid';
-	variables.dbs.tableAdd(tableName = 'log_' & arguments.tableName, columnList = this.columnList, valuesList = arguments.valuesList);
+	package any function addData(
+		required string name,
+		required struct data
+	) {
+		var columns = '';
+		var values = '';
+		var entryAdded = {};
 
-	// writeDump(var=this, expand=false, label='This Table Addition');
+		data.each(
+			function(key, value) {
+				values.listAppend(value);
+				columns.listAppend(key);
+			}
+		);
+		writeDump(var=columns, expand=false, label='column list table.add()');
+		writeDump(var=values, expand=false, label='values list table.add()');
 
-	return this;
-  }
+		var entryAdded = variables.dbs.tableAdd(
+			name = arguments.name,
+			columns = columns,
+			values = values
+		);
+
+		return entryAdded;
+	}
 
   /**
   * @displayName 'Read Table Data'
@@ -100,7 +117,7 @@ component {
 	var offset = (intPage - 1) * intMaxRows;
 
 	data = variables.dbs.tableRead(
-	  tableName = 'log_' & arguments.tableName,
+	  tableName = arguments.tableName,
 	  strFieldList = arguments.strFieldList,
 	  strOrderBy = arguments.strOrderBy,
 	  strWhere = arguments.strWhere,
@@ -133,10 +150,10 @@ component {
   */
 
   package query function countRecords( required string tableName ) {
-	data = structNew();
+	var data = structNew();
 
 	// NOTE: Get the record count by calling variables.db.countRecords
-	data = variables.dbs.countRecords(tableName = 'log_' & arguments.tableName);
+	data = variables.dbs.countRecords(tableName = arguments.tableName);
 	writeDump(var=data);
 
 	// NOTE: Convert the result to a number.

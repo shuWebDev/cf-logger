@@ -54,12 +54,21 @@ component {
 		boolean useFile=0 hint='Create a JSON file for this log.',
 		array fields=[] hint='Columns for the table that gets created. We''ll also include browser & CGI info.'
 	) {
-
 		var standardFields = [
 			'created DATETIME NOT NULL',
-			'serverID VARCHAR(50)',
-			'serverIP VARCHAR(50)',
-			'serverName VARCHAR(50)',
+			'commonspotServerID VARCHAR(50)',
+			'commonspotServerName VARCHAR(50)',
+			'commonspotUserInfo VARCHAR(250)',
+			'pathTranslated VARCHAR(250)',
+			'queryString VARCHAR(50)',
+			'referer VARCHAR(50)',
+			'remoteAddress VARCHAR(50)',
+			'remoteHost VARCHAR(50)',
+			'requestMethod VARCHAR(50)',
+			'scriptName VARCHAR(50)',
+			'type VARCHAR(50)',
+			'url VARCHAR(250)',
+			'userAgent VARCHAR(250)',
 			'uuid VARCHAR(35) NOT NULL',
 			'PRIMARY KEY ( uuid )'
 		];
@@ -103,7 +112,6 @@ component {
 
 				// NOTE: Check to see if the table exists. If not, create it.
 				this['createLogTable'] = table.create(name=getName(), fields=arguments.fields);
-
 				// writeDump(var=this.createLogTable, expand=false, label='log.init() createLogTable');
 			}
 
@@ -217,39 +225,50 @@ component {
 	* @displayName 'Update Log'
 	* @description 'Updates an existing log.'
 	* @hint 'Updates log.'
-	* @output false
+	* @output true
 	* @returnType any
 	*/
 
 	public function update(
 		required struct entry,
-		string name=getname(),
-		string entryType = 'info',
-		string fileType = getFileType(),
-		string serverIP = evaluate('request.cp.serverCache.#request.cp.serverID#.ip'),
-		string serverName = evaluate('request.cp.serverCache.#request.cp.serverID#.name'),
-		string serverID = request.cp.serverID
+		string name=variables.getname(),
+		string entryType = 'info'
 	) {
+		// NOTE: Get CGI Info
+		var cgiInfo = variables.extra.getCGIInfo();
+		// writeDump(var=cgiInfo, expand=false, label='cgiInfo');
+
 		// NOTE: Set default values;
-		var data = structNew();
-		data.orig.name = arguments.name;
-		data.orig.fileType = arguments.fileType;
-		data.entryType = arguments.entryType;
-		data.entry = arguments.entry;
-		data.entry.browser = variables.logExtra.getBrowserInfo();
-		data.entry.cgi = variables.logExtra.getCGIInfo();
-		data.entry.user = variables.logExtra.getUserData();
-		data.serverIP = arguments.serverIP;
-		data.serverName = arguments.serverName;
-		data.serverID = arguments.serverID;
-		data.uuid = createUUID();
-		data.created = dateTimeFormat(now(), 'yyyy-mm-dd HH:nn:ss.l');
+		var data = arguments.entry;
+
+		data['created'] = dateTimeFormat(now(), 'yyyy-mm-dd HH:nn:ss.l');
+		data['type'] = arguments.entryType;
+		data['uuid'] = createUUID();
+		data['pathTranslated'] = cgiInfo.pathTranslated;
+		data['queryString'] = cgiInfo.queryString;
+		data['referer'] = cgiInfo.referer;
+		data['remoteAddress'] = cgiInfo.remoteAddress;
+		data['remoteHost'] = cgiInfo.remoteHost;
+		data['requestMethod'] = cgiInfo.requestMethod;
+		data['scriptName'] = cgiInfo.scriptName;
+		data['serverName'] = cgiInfo.serverName;
+		data['url'] = cgiInfo.url;
+		data['userAgent'] = cgiInfo.userAgent;
+		data['commonspotUserInfo'] = "variables.extra.getUserData()"; // NOTE: This is for CommonSpot only.
+		data['commonspotServerName'] = "evaluate('request.cp.serverCache.##request.cp.serverID##.name')"; // NOTE: This is for CommonSpot only.
+		data['commonspotServerID'] = "request.cp.serverID"; // NOTE: This is for CommonSpot only.
 
 		try {
-			// data.filePathInfo = variables.logFile.setFilePath(name=arguments.name, date=now());
+			// NOTE: Update the db table with the log info.
+			writeDump(var=variables, expand=false, label='Variables @ log.update()');
+			tableDataAdded = variables.table.addData(name=arguments.name, data=data);
+
+
+			// NOTE: Update a file
+			// data['filePathInfo'] = variables.logFile.setFilePath(name=arguments.name, date=now());
 
 			// // NOTE: Check to see if a file with file name already exists
-			// data.checkFile = variables.logFile.check(data.filePathInfo.fullPath);
+			// data['checkFile'] = variables.logFile.check(data.filePathInfo.fullPath);
 
 			// // NOTE: If the file doesn't exist, then create a new one and return the UUID, file name, file path and creation time as a structure
 			// if ( !data.checkFile ) {
@@ -285,23 +304,6 @@ component {
 			// // ==========
 			// // FIXME: end
 			// // ==========
-
-
-			// NOTE: Check to see if a db table for the log exists
-			data.checkTable = variables.logTable.check( tableName=arguments.name );
-			// writeDump(var=data.checkTable, expand=false, label='Check table from update()');
-
-			// NOTE: If the file doesn't exist, then create a new one and return the UUID, file name, file path and creation time as a structure
-			if ( !data.checkTable ) {
-				data.newTable = variables.logTable.create(arguments.name);
-				// writeDump(var=data.newTable, expand=false, label='New table from update()');
-			}
-
-			// NOTE: Generate a list of values to insert into the db.
-			data.addTableDataList = "'" & data.created & "', '" & serializeJSON(data.entry) & "', '', '" & data.serverID & "', '" & data.serverIP & "', '" & data.serverName & "', '" & data.entryType & "', '" & data.uuid & "'";
-
-			// NOTE: Update the db table with the log info.
-			data.addTableData = variables.logTable.addData(tableName = arguments.name, valuesList = data.addTableDataList);
 		}
 
 		catch (any e) {
@@ -311,8 +313,9 @@ component {
 
 		// NOTE: Always do this...
 		finally {
-			// writeDump(var=data, expand=false, label='update() finally');
-			return data;
+			writeDump(var=data, expand=false, label='update() finally');
+			writeDump(var=tableDataAdded, expand=false, label='update() finally tableDataAdded');
+			return tableDataAdded;
 		}
 	} // end update()
 
