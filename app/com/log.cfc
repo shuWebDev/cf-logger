@@ -55,21 +55,22 @@ component {
 		array fields=[] hint='Columns for the table that gets created. We''ll also include browser & CGI info.'
 	) {
 		var standardFields = [
-			'created DATETIME NOT NULL',
+			'created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP',
 			'commonspotServerID VARCHAR(50)',
-			'commonspotServerName VARCHAR(50)',
+			'commonspotServerName TEXT',
 			'commonspotUserInfo VARCHAR(250)',
 			'pathTranslated VARCHAR(250)',
-			'queryString VARCHAR(50)',
-			'referer VARCHAR(50)',
-			'remoteAddress VARCHAR(50)',
-			'remoteHost VARCHAR(50)',
-			'requestMethod VARCHAR(50)',
-			'scriptName VARCHAR(50)',
+			'queryString TEXT',
+			'referer TEXT',
+			'remoteAddress VARCHAR(25)',
+			'remoteHost VARCHAR(150)',
+			'requestMethod VARCHAR(25)',
+			'scriptName VARCHAR(150)',
+			'serverName VARCHAR(150)',
 			'type VARCHAR(50)',
 			'url VARCHAR(250)',
 			'userAgent VARCHAR(250)',
-			'uuid VARCHAR(35) NOT NULL',
+			'uuid VARCHAR(35) NOT NULL DEFAULT ''00000000-0000-0000-0000000000000000''',
 			'PRIMARY KEY ( uuid )'
 		];
 
@@ -260,8 +261,8 @@ component {
 
 		try {
 			// NOTE: Update the db table with the log info.
-			writeDump(var=variables, expand=false, label='Variables @ log.update()');
-			tableDataAdded = variables.table.addData(name=arguments.name, data=data);
+			// writeDump(var=variables, expand=false, label='Variables @ log.update()');
+			var tableDataAdded = variables.table.addData(name=arguments.name, data=data);
 
 
 			// NOTE: Update a file
@@ -313,8 +314,8 @@ component {
 
 		// NOTE: Always do this...
 		finally {
-			writeDump(var=data, expand=false, label='update() finally');
-			writeDump(var=tableDataAdded, expand=false, label='update() finally tableDataAdded');
+			// writeDump(var=data, expand=false, label='update() finally');
+			// writeDump(var=tableDataAdded, expand=false, label='update() finally tableDataAdded');
 			return tableDataAdded;
 		}
 	} // end update()

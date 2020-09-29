@@ -46,7 +46,7 @@ component {
 		required string name hint='The name of the table to be created.',
 		required array fields hint='The columns of data to be saved.'
 	) {
-		writeDump(var=arguments, expand=false, label='table.create() arguments');
+		// writeDump(var=arguments, expand=false, label='table.create() arguments');
 
 		try {
 			variables.dbs.tableCreate(tableName = arguments.name, columns = arrayToList(arguments.fields));
@@ -76,23 +76,22 @@ component {
 		required string name,
 		required struct data
 	) {
-		var columns = '';
-		var values = '';
+		var fields = [];
+		var content = [];
 		var entryAdded = {};
 
-		data.each(
-			function(key, value) {
-				values.listAppend(value);
-				columns.listAppend(key);
-			}
-		);
-		writeDump(var=columns, expand=false, label='column list table.add()');
-		writeDump(var=values, expand=false, label='values list table.add()');
+		for (var key in data) {
+			// writeOutput('<p><strong>' & key & ':</strong> ' & data[key] & '</p>');
+			arrayAppend(fields, key);
+			arrayAppend(content, '"#data[key].toString()#"');
+		};
+		// writeDump(var=fields, expand=false, label='column list table.add()');
+		// writeDump(var=content, expand=false, label='values list table.add()');
 
 		var entryAdded = variables.dbs.tableAdd(
 			name = arguments.name,
-			columns = columns,
-			values = values
+			columns = fields.toList(),
+			values = content.toList()
 		);
 
 		return entryAdded;

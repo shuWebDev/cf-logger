@@ -75,7 +75,7 @@ component {
 		qryGet.setSQL('
 			CREATE ' & tableType & 'TABLE ' & checkExists & '`' & arguments.tableName & '`' & ' (' & arguments.columns & ');
 		');
-		writeDump(var=qryGet, expand=false, label='qryGet from dbs.tableCreate()');
+		// writeDump(var=qryGet, expand=false, label='qryGet from dbs.tableCreate()');
 
 		// NOTE: Execute the query.
 		qryExecute = qryGet.execute();
@@ -139,12 +139,14 @@ component {
   * @output true
   */
 
-	package any function tableAdd(
+	package struct function tableAdd(
 		required string name,
 		required string columns,
 		required string values,
 		string datasource=getDSN()
 	) {
+		// writeDump(var=arguments, expand=false, label='Arguments from dbs.tableAdd()');
+
 		// NOTE: Create a place holder structure to be returned.
 		var data = {};
 
@@ -161,15 +163,15 @@ component {
 		VALUES (' & arguments.values & ');
 		');
 
+		writeDump(var=qryAdd, expand=false, label='qryAdd from dbs.tableAdd()');
+
 		// NOTE: Execute the query.
 		qryExecute = qryAdd.execute();
+		writeDump(var=qryExecute, expand=false, label='qryExecute from dbs.tableAdd()');
 
 		data.result = qryExecute.getResult();
 		data.prefix = qryExecute.getPrefix();
-		writeDump(var=qryAdd, expand=false, label='qryAdd from dbs.tableAdd()');
-		writeDump(var=qryExecute, expand=false, label='Data from function');
-		writeDump(var=arguments, expand=false, label='addTable Arguments');
-		writeDump(var=qryAdd, expand=false, label='Data from dbs.tableAdd()');
+		// writeDump(var=data, expand=false, label='Data from dbs.tableAdd()');
 
 		// NOTE: Clear out the query so we can run another one fresh.
 		qryAdd.clearParams();
